@@ -95,5 +95,5 @@ class ImageIDHandler(BaseImageHandler):
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write(json.dumps({
-            'name': image_id
+            'id': image_id
         }))

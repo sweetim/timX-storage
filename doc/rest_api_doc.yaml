@@ -1,0 +1,134 @@
+swagger: '2.0'
+info:
+  title: timX Storage API
+  description: timX microservice for storing files
+  version: "1.0.0"
+host: timx-storage.appspot.com
+schemes:
+  - http
+basePath: /api
+produces:
+  - application/json
+paths:
+  /image:
+    post:
+      summary: Store image
+      description: |
+        The image endpoint will store the image into cloud data storage
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: image
+          in: formData
+          description: The image file.
+          required: true
+          type: file
+        - name: name
+          in: formData
+          description: The filename.
+          required: true
+          type: string
+      responses:
+        200:
+          description: The image information.
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Image'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /image/{image_id}:
+    get:
+      summary: Get the image information.
+      parameters:
+        - name: image_id
+          in: path
+          type: string
+          required: true
+          description: The image ID obtain from POST /image
+      responses:
+        200:
+          description: Successful return the image information.
+          schema:
+            $ref: '#/definitions/ImageInfo'
+        404:
+          description: Invalid image ID
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete the image stored in the storage.
+      parameters:
+        - name: image_id
+          in: path
+          type: string
+          required: true
+          description: The image ID obtain from POST /image
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ImageDelete'
+        404:
+          description: Invalid image ID
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Image:
+    properties:
+      url:
+        type: string
+      name:
+        type: string
+      mimetype:
+        type: string
+      id:
+        type: integer
+  ImageInfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Position in pagination.
+      name:
+        type: integer
+        format: int32
+        description: Number of items to retrieve (100 max).
+      size:
+        type: integer
+        format: int32
+        description: Total number of items available.
+      url:
+        type: string
+        format: string
+        description: Public URL of the image
+      time:
+        type: integer
+        format: int32
+        description: Position in pagination.
+  ImageDelete:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Deleted image ID.
+  Error:
+    type: object
+    properties:
+      error:
+        type: integer
+        format: int32
+      message:
+        type: string

@@ -28,6 +28,11 @@ paths:
           description: The image file.
           required: true
           type: file
+        - name: contentType
+          in: formData
+          description: The file content type.
+          required: true
+          type: string
         - name: name
           in: formData
           description: The filename.

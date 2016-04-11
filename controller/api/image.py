@@ -45,7 +45,7 @@ class ImageHandler(BaseImageHandler):
     def post(self):
         image = self.request.get('image')
         name = self.request.get('name')
-        content_type = self.request.POST['image'].type
+        content_type = self.request.get('contentType')
 
         bucket_name = generate_bucket_filename(name)
 
